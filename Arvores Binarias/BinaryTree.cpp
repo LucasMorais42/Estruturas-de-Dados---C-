@@ -3,12 +3,23 @@
 using namespace std;
 
 BinaryTree::BinaryTree() : raiz(nullptr) {}
-BinaryTree::~BinaryTree() {}
+BinaryTree::~BinaryTree() {destruirRecursivo(raiz);}
+
+void destruirRecursivo(No* no) {
+        if (no) {
+            destruirRecursivo(no->esquerda);
+            destruirRecursivo(no->direita);
+            delete no;
+        }
+    }
+
+
 
 void BinaryTree::inserir(tipoItem valor)
 {
   inserirRecursiva(raiz, valor);
 }
+
 
 /*usamos *& porque eu quero um ponteiro do tipo no porem eu quero que o meu codigo altere diretamente o ponteiro, ou seja,
 se raiz = nullptr, como eu passei a raiz pro no, eu quero que raiz = new No(valor);
@@ -21,6 +32,7 @@ no*& = raiz (raiz é um ponteiro e está sendo referenciada diretamente)
 se eu fizesse
 no = "batata"; (se fosse possível, é o endereço de raiz que está sendo mudado para "batata").
 */
+
 
 void BinaryTree::inserirRecursiva(No *&no, tipoItem valor)
 {
@@ -55,6 +67,7 @@ void BinaryTree::inserirRecursiva(No *&no, tipoItem valor)
     Esse jogo de pegar o a esquerda ou a direita só vai acabar quando eu encontrar o caso-base da recursão que é
     ver se o meu nó é um ponteiro nulo, ou seja, não há elementos pra verificar se é maior ou menor, ali iremos criar o nó
   */
+}
 
   int tamanho(No* no)
   {
@@ -115,4 +128,37 @@ void imprimir_posOrdem(No* no) {
     }
 }
 
+//Função que avalia se um árvore está vazia ou não
+bool BinaryTree::estaVazia() const {
+    return raiz == nullptr;
+}
+
+//Retorna o valor da nossa Raiz
+tipoItem BinaryTree::valorRaiz() const {
+    if (raiz == nullptr)
+        throw std::runtime_error("Árvore vazia");
+    return raiz->valor;
+}
+
+//Função pública da nossa árvore, que irá chamar a recursiva
+bool BinaryTree::buscar(tipoItem valor) const {
+    return buscarRecursivo(raiz, valor);
+}
+
+//A função busca recursiva, basicamente faz:
+/*
+CASO BASE 1: Se o nó for nullptr, significa que passamos todos os nós e ele não existe
+CASO BASE 2: Se o valor do nó que estamos passando foi igual o valor que queremos, retorna true (achamos o valor)
+CASO RECURSIVO 1: Se o valor do nó que buscamos, for menor que o valor do nó atual, chamamos recursivamente a função
+passando o valor a esquerda do nó atual
+CASO RECURSIVO 2: Caso os 3 casos acima não sejam concluidos, nós vamos chamar a função recursiva passando os valores a direita
+do nó (caso do valor for maior que o nó atual) 
+
+
+*/
+bool BinaryTree::buscarRecursivo(No* no, tipoItem valor) const {
+    if (no == nullptr) return false;
+    if (valor == no->valor) return true;
+    if (valor < no->valor) return buscarRecursivo(no->esquerda, valor);
+    return buscarRecursivo(no->direita, valor);
 }

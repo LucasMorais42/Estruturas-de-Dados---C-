@@ -1,20 +1,6 @@
 #ifndef LISTAADJACENCIA_HPP
 #define LISTAADJACENCIA_HPP
 
-class Vertice{
-  
-  public:
-    //ponteiro pro primeiro elemento da lista encadeada;
-    Adjacencia *cab;
-    
-    //método construtor
-    Vertice(){	
-        //ao ser inicializado o cab aponta pra nullptr
-
-    }
-  
-};
-
 class Adjacencia{
   
   public:
@@ -22,8 +8,24 @@ class Adjacencia{
     int peso; //peso da aresta
     Adjacencia *prox; //endereço da proxima adjacencia
     
-    Adjacencia(){}
+    Adjacencia();
+
+    static Adjacencia *cria_Adjacencia(int v, int peso);
+    
 };
+
+class Vertice{
+  
+  public:
+    //ponteiro pro primeiro elemento da lista encadeada;
+    Adjacencia *cab;
+    
+    //método construtor
+    Vertice();
+        //ao ser inicializado o cab aponta pra nullptr
+  
+};
+
 
 
 class Grafo{
@@ -32,10 +34,10 @@ class Grafo{
     int arestas, vertices;
     Vertice *adj;
     
-    Grafo(int v){
-    
-    }
-  
+    Grafo(int v);
+
+    bool criaAresta(int vi, int vf, int peso);
+    void imprimeGrafo();
 };
 
 

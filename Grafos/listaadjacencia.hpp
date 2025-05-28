@@ -38,6 +38,8 @@ class Grafo{
 
     bool criaAresta(int vi, int vf, int peso);
     void imprimeGrafo();
+    void buscaEmProfundidade();
+    void visitaP(int u, int *cor);
 };
 
 

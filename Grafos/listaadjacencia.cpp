@@ -35,96 +35,57 @@ void Grafo::imprimeGrafo(){
         cout << "\n";
     }
 }
- 
 
-enum cores{
-    WHITE, //valor 0, nao processado
-    YELLOW, //valor 1, nós em processamento
-    RED // valor 2, todos nós já processados
-  };
+enum cores {
+    WHITE,
+    YELLOW,
+    RED
+};
 
-void Grafo::buscaEmProfundidade(){
- 
+bool encontrado = false;
 
-  int cor[vertices]; //crio um vetor que salvará o estado de cada vertice, qual cor cada um está
-  
-  
-  int u;
+void Grafo::buscaEmProfundidade(int chave) {
+    int cor[vertices];
+    int u;
 
-  for(u=0; u<vertices; u++){
-    cor[u] = WHITE; //defino todos os vértices como BRANCO (não processados)
-  }
-
-  for(u=0; u<vertices; u++){
-    if(cor[u]==WHITE){
-        visitaP(u, cor);
+    for (u = 0; u < vertices; u++) {
+        cor[u] = WHITE;
     }
-  }
+
+    for (u = 0; u < vertices; u++) {
+        if (cor[u] == WHITE) {
+            visitaP(u, cor);
+        }
+    }
+
+    if (!encontrado)
+        cout << "Chave " << chave << " não encontrada.\n";
 }
 
-void Grafo::visitaP(int u, int *cor){
-    cor[u] = YELLOW; //acabou de receber por exemplo o vertice 0, seta ele em amarelo (em processamento)
-    Adjacencia *v = adj[u].cab; //pega o primeiro elemento da lista de adjacencias do vertice 0
+void Grafo::visitaP(int u, int *cor, int chave) {
 
-    while(v){ //enquanto a lista encadeada nao chegar em nullptr
-      if(cor[v->vertice]==WHITE){ //se a cor do elemento do vértice da lista encadeada for branco (não processado)
-        visitaP(v->vertice, cor); //faço uma chamada recursiva passando ele mesmo
-      } 
-      v = v ->prox; //sai do if e passa pro próximo elemento da lista encadeada
+     if (encontrado) return;
+     cor[u] = YELLOW;
+
+     if (u == chave) {
+        cout << "Chave " << chave << " encontrada!\n";
+        encontrado = true;
+        return;
     }
-    cor[u] = RED; //quando eu passei por todos da lista encadeada, significa que o vertice inicial fica vermelho
 
-  /*Suponha o grafo:
-  v0 → [v1, v2, v3]
-  v1 → [v2]
-  v2 → []
-  v3 → []
-  
-  1ª Chamada inicial: visitaP(0, cor)
+    Adjacencia *v = adj[u].cab;
 
-      cor[0] = YELLOW
-      v = adj[0].cab → aponta pro nó da lista com v1
-      entra no while(v)
-          v = v1;
-          cor[1] == WHITE → chama visitaP(1, cor)
+    while (v) {
+        if (cor[v->vertice] == WHITE) {
+            visitaP(v->vertice, cor, chave);
+        }
+        v = v->prox;
+    }
 
-  2ª chamada: visitaP(1, cor)
-      cor[1] = YELLOW
-      v = adj[1].cab → aponta pro nó com v2
-      entra no while(v)
-          v = v2
-          cor[2] == WHITE → chama visitaP(2, cor)
-  
-  3ªchamada: visitaP(2, cor)
-      cor[2] = YELLOW
-      v = adj[2].cab → nullptr, pois v2 não tem adjacentes
-      while(v) não entra
-      cor[2] = RED
-      retorna para visitaP(1) (ou chamada 2ª)
-
-  2ªchamada DESEMPILHADA:
-      v = v->prox → agora v = nullptr (pois v1 só tinha v2)
-      sai do loop
-      cor[1] = RED
-      retorna para visitaP(0)
-
-  1ª chamada DESEMPILHADA:
-      v = v->prox → agora v = v2 (próximo da lista de v0)
-      cor[2] == RED, não entra no if, só avança
-      v = v->prox → v3
-      cor[3] == WHITE → chama visitaP(3)
-  
-  4ª chamda visitaP(3, cor)
-      cor[3] = YELLOW, lista vazia 
-      v = v->prox → agora nullptr
-      sai do loop
-      cor[3] = RED
-
-  Volta pra 1ª chamada novamente:
-      cor[0] =RED
-
-  */
+    cor[u] = RED;
 }
+
+
 
   //método construtor
   Vertice::Vertice(): cab(nullptr){	

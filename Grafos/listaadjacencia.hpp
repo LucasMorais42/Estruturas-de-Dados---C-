@@ -19,6 +19,7 @@ class Vertice{
   public:
     //ponteiro pro primeiro elemento da lista encadeada;
     Adjacencia *cab;
+    string nome;
     
     //método construtor
     Vertice();
@@ -38,8 +39,8 @@ class Grafo{
 
     bool criaAresta(int vi, int vf, int peso);
     void imprimeGrafo();
-    void buscaEmProfundidade();
-    void visitaP(int u, int *cor);
+    void buscaEmProfundidade(int chave);
+    void visitaP(int u, int *cor, int chave);
 };
 
 

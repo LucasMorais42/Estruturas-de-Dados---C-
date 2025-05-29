@@ -54,7 +54,7 @@ void Grafo::buscaEmProfundidade(int chave) {
 
     for (u = 0; u < vertices; u++) {
         if (cor[u] == WHITE) {
-            visitaP(u, cor);
+            visitaP(u, cor, chave);
         }
     }
 
